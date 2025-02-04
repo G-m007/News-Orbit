@@ -18,12 +18,28 @@ export async function fetchNews(searchQuery: string, language: string, sortBy: s
   }
 
   const queryString = new URLSearchParams(params).toString();
-  const response = await fetch(`${endpoint}?${queryString}`);
   
-  if (!response.ok) {
-    throw new Error('Failed to fetch news');
-  }
+  // Use a CORS proxy for deployed environment
+  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+  const url = process.env.NODE_ENV === 'production' 
+    ? `${corsProxy}${endpoint}?${queryString}`
+    : `${endpoint}?${queryString}`;
 
-  const data = await response.json();
-  return data.articles;
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Origin': 'https://newsapi.org',
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch news');
+    }
+
+    const data = await response.json();
+    return data.articles;
+  } catch (error) {
+    console.error('Error fetching news:', error);
+    throw error;
+  }
 }
