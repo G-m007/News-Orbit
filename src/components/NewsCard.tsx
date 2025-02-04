@@ -1,9 +1,9 @@
 interface NewsCardProps {
     article: {
       title: string;
-      description: string;
+      description?: string;
       url: string;
-      urlToImage: string;
+      urlToImage?: string;
       source: { name: string };
       publishedAt: string;
     };
