@@ -1,22 +1,24 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'NewsOrbit - Your Gateway to Global News',
-  description: 'Stay informed with the latest breaking news and trending stories from around the world.',
-};
+  title: 'News Orbit',
+  description: 'Your Gateway to Global News',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="dark">
+      <body className={`${inter.className} min-h-screen bg-gradient-to-br from-gray-900 to-black`}>
+        {children}
+      </body>
     </html>
-  );
+  )
 }
