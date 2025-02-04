@@ -1,9 +1,10 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NEXT_PUBLIC_NEWS_API_KEY = "your_api_key_here" 
+  NEXT_PUBLIC_NEWS_API_KEY = "your_api_key_here"
+  NEXT_TELEMETRY_DISABLED = "1"
