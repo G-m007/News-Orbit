@@ -33,8 +33,9 @@ export default function NewsList({ searchQuery, language, sortBy, category }: Ne
         setNews(articles);
         setError('');
       } catch (err) {
-        setError('Failed to fetch news');
-        console.error(err);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch news';
+        setError(errorMessage);
+        console.error('News fetch error:', err);
       } finally {
         setLoading(false);
       }
@@ -55,6 +56,9 @@ export default function NewsList({ searchQuery, language, sortBy, category }: Ne
     return (
       <div className="text-center p-4 bg-red-900/50 rounded-lg">
         <p className="text-red-200">{error}</p>
+        <p className="text-red-300 text-sm mt-2">
+          Please check your API key and try again
+        </p>
       </div>
     );
   }

@@ -22,6 +22,11 @@ export default function Home() {
     setSearchQuery('');
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCategory(''); // Clear category when searching
+  };
+
   const effectiveQuery = searchQuery || 'top headlines';
 
   return (
@@ -32,7 +37,7 @@ export default function Home() {
       />
       <div className="container mx-auto px-4 py-8">
         <SearchBar 
-          onSearch={setSearchQuery}
+          onSearch={handleSearch}
           onLanguageChange={setSelectedLanguage}
           onSortChange={setSortBy}
         />

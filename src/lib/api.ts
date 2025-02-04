@@ -1,45 +1,58 @@
-const TOP_NEWS_ENDPOINT = 'https://newsapi.org/v2/top-headlines';
-const EVERYTHING_ENDPOINT = 'https://newsapi.org/v2/everything';
+const GNEWS_ENDPOINT = 'https://gnews.io/api/v4';
 
 export async function fetchNews(searchQuery: string, language: string, sortBy: string, category?: string) {
   const isTopHeadlines = searchQuery === 'top headlines' || category;
-  const endpoint = isTopHeadlines ? TOP_NEWS_ENDPOINT : EVERYTHING_ENDPOINT;
-  
+  const endpoint = isTopHeadlines 
+    ? `${GNEWS_ENDPOINT}/top-headlines` 
+    : `${GNEWS_ENDPOINT}/search`;
+
   const params: Record<string, string> = {
-    language,
-    apiKey: process.env.NEXT_PUBLIC_NEWS_API_KEY || '',
+    apikey: process.env.NEXT_PUBLIC_NEWS_API_KEY || '',
+    lang: language,
+    max: '10',
+    sortby: sortBy === 'publishedAt' ? 'published_at' : sortBy, // Map to GNews sort parameters
   };
 
-  if (isTopHeadlines && category) {
-    params.category = category;
-  } else if (!isTopHeadlines) {
+  // Handle search query
+  if (!isTopHeadlines) {
     params.q = searchQuery;
-    params.sortBy = sortBy;
+  } else if (category && category !== 'general') {
+    params.category = category;
+    params.q = 'top'; // Required for GNews API
+  } else {
+    params.q = 'top'; // Default query for top headlines
   }
 
-  const queryString = new URLSearchParams(params).toString();
-  
-  // Use a CORS proxy for deployed environment
-  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-  const url = process.env.NODE_ENV === 'production' 
-    ? `${corsProxy}${endpoint}?${queryString}`
-    : `${endpoint}?${queryString}`;
-
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Origin': 'https://newsapi.org',
-      }
-    });
+    const queryString = new URLSearchParams(params).toString();
+    const url = `${endpoint}?${queryString}`;
+    console.log('Fetching URL:', url); // Debug log
+
+    const response = await fetch(url);
     
     if (!response.ok) {
-      throw new Error('Failed to fetch news');
+      const errorData = await response.json();
+      console.error('API Error:', errorData);
+      throw new Error(`API Error: ${errorData.errors?.[0] || 'Failed to fetch news'}`);
     }
 
     const data = await response.json();
-    return data.articles;
+
+    if (!data.articles || !Array.isArray(data.articles)) {
+      console.error('Invalid response format:', data);
+      throw new Error('Invalid response format from API');
+    }
+
+    return data.articles.map((article: any) => ({
+      title: article.title,
+      description: article.description,
+      url: article.url,
+      urlToImage: article.image,
+      source: { name: article.source.name },
+      publishedAt: article.publishedAt
+    }));
   } catch (error) {
-    console.error('Error fetching news:', error);
+    console.error('Detailed error:', error);
     throw error;
   }
 }
