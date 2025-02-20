@@ -1,11 +1,13 @@
 'use client';
 
+import Script from 'next/script';
 import { useEffect } from 'react';
 
 export default function AdUnit() {
   useEffect(() => {
     try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+      const adsbygoogle = (window as any).adsbygoogle || [];
+      adsbygoogle.push({});
     } catch (err) {
       console.error('AdSense error:', err);
     }
@@ -13,6 +15,12 @@ export default function AdUnit() {
 
   return (
     <div className="my-6">
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4313015349174016"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
