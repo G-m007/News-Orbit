@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import NewsCard from './NewsCard';
 import { fetchNews } from '@/lib/api';
+import AdUnit from './AdUnit';
 
 interface NewsListProps {
   searchQuery: string;
@@ -67,7 +68,10 @@ export default function NewsList({ searchQuery, language, sortBy, category }: Ne
     <div className="space-y-6">
       {news.length > 0 ? (
         news.map((article, index) => (
-          <NewsCard key={`${article.url}-${index}`} article={article} />
+          <div key={`${article.url}-${index}`}>
+            <NewsCard article={article} />
+            {(index + 1) % 3 === 0 && index !== news.length - 1 && <AdUnit />}
+          </div>
         ))
       ) : (
         <div className="text-center p-4 bg-gray-800 rounded-lg">
