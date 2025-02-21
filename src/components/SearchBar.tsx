@@ -6,9 +6,10 @@ interface SearchBarProps {
     onSearch: (query: string) => void;
     onLanguageChange: (language: string) => void;
     onSortChange: (sortBy: string) => void;
+    onCategoryChange: (category: string) => void;
   }
   
-  export default function SearchBar({ onSearch, onLanguageChange, onSortChange }: SearchBarProps) {
+  export default function SearchBar({ onSearch, onLanguageChange, onSortChange, onCategoryChange }: SearchBarProps) {
     const [inputValue, setInputValue] = useState('');
 
     const handleSubmit = (e: FormEvent) => {
@@ -47,6 +48,20 @@ interface SearchBarProps {
           <option value="publishedAt">Latest</option>
           <option value="relevancy">Relevant</option>
           <option value="popularity">Popular</option>
+        </select>
+
+        <select
+          onChange={(e) => onCategoryChange(e.target.value)}
+          className="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          defaultValue="general"
+        >
+          <option value="general">General</option>
+          <option value="business">Business</option>
+          <option value="technology">Technology</option>
+          <option value="science">Science</option>
+          <option value="health">Health</option>
+          <option value="sports">Sports</option>
+          <option value="entertainment">Entertainment</option>
         </select>
 
         <button 

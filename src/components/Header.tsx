@@ -1,50 +1,44 @@
-interface HeaderProps {
-  onBreakingNewsClick: () => void;
-  onCategorySelect: (category: string) => void;
-}
+'use client';
 
-export default function Header({ onBreakingNewsClick, onCategorySelect }: HeaderProps) {
-  const categories = [
-    'general',
-    'business',
-    'entertainment',
-    'health',
-    'science',
-    'sports',
-    'technology'
-  ];
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
+export default function Header() {
+  const pathname = usePathname();
+  
+  const isActive = (path: string) => pathname === path;
+  
   return (
-    <header className="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-white">
-              News<span className="text-blue-500">Orbit</span>
-            </h1>
-            <p className="text-gray-400 text-sm">Your Gateway to Global News</p>
+    <header className="bg-gray-900 shadow-lg mb-8">
+      <nav className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="text-2xl font-bold text-blue-400 hover:text-blue-300">
+            News Orbit
+          </Link>
+          
+          <div className="flex gap-6">
+            <Link 
+              href="/" 
+              className={`${isActive('/') ? 'text-blue-400' : 'text-gray-300'} hover:text-blue-300`}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/about" 
+              className={`${isActive('/about') ? 'text-blue-400' : 'text-gray-300'} hover:text-blue-300`}
+            >
+              About
+            </Link>
+            <Link 
+              href="/contact" 
+              className={`${isActive('/contact') ? 'text-blue-400' : 'text-gray-300'} hover:text-blue-300`}
+            >
+              Contact
+            </Link>
+            
           </div>
-          <nav className="flex items-center space-x-6">
-            <button 
-              onClick={onBreakingNewsClick}
-              className="text-gray-300 hover:text-white"
-            >
-              Breaking News
-            </button>
-            <select 
-              onChange={(e) => onCategorySelect(e.target.value)}
-              className="bg-gray-800 text-gray-300 px-3 py-2 rounded-md border border-gray-700 focus:outline-none focus:border-blue-500"
-              defaultValue="general"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </option>
-              ))}
-            </select>
-          </nav>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

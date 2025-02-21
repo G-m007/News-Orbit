@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Script from 'next/script'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 import './globals.css'
+import GoogleAdsense from '@/components/GoogleAdsense';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,16 +18,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4313015349174016"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <GoogleAdsense />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} min-h-screen flex flex-col bg-gray-900`}>
+        <Header />
+        <main className="flex-1 container mx-auto px-4">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   )
 }

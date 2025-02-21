@@ -70,12 +70,17 @@ export default function NewsList({ searchQuery, language, sortBy, category }: Ne
         news.map((article, index) => (
           <div key={`${article.url}-${index}`}>
             <NewsCard article={article} />
-            {(index + 1) % 3 === 0 && index !== news.length - 1 && <AdUnit />}
+            {(index + 1) % 4 === 0 && index !== news.length - 1 && (
+              <div className="my-8 py-4 border-t border-b border-gray-700">
+                <h3 className="text-gray-400 text-sm mb-4">Advertisement</h3>
+                <AdUnit />
+              </div>
+            )}
           </div>
         ))
       ) : (
-        <div className="text-center p-4 bg-gray-800 rounded-lg">
-          <p className="text-gray-400">No news articles found</p>
+        <div className="text-center text-gray-400">
+          No news articles found
         </div>
       )}
     </div>
